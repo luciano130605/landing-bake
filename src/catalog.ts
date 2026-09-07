@@ -159,7 +159,7 @@ export const PRODUCTS: Product[] = [
     featured: true,
     variants: [
       { id: "simple", label: "Simple", price: 650 },
-      { id: "rellena", label: "Rellena", price: 900 },
+      { id: "rellena", label: "Rellena", price: 950 },
     ],
   },
   {
