@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import {
   CATEGORIES,
   productsIn,
@@ -20,6 +20,7 @@ function catId(cat: string) {
 
 function Home() {
   const [activeCat, setActiveCat] = useState<Category>("Tortas");
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
     const sections = CATEGORIES.map((c) => document.getElementById(catId(c))).filter(
@@ -40,6 +41,22 @@ function Home() {
     );
     sections.forEach((s) => obs.observe(s));
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      setShowScrollTop(scrollTop + windowHeight >= documentHeight - 300);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -97,6 +114,22 @@ function Home() {
           </section>
         );
       })}
+
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
+          aria-label="Volver arriba"
+          className="fixed bottom-6 right-6 z-50 flex size-12 items-center justify-center rounded-full bg-fg text-bg shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
+        >
+          <ChevronUp className="size-5" strokeWidth={2.2} />
+        </button>
+      )}
     </>
   );
 }
