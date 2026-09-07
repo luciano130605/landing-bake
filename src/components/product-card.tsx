@@ -1,0 +1,92 @@
+import { useEffect, useRef, useState } from "react";
+import { formatARS, type Product, type Variant } from "@/catalog";
+import { useBakery } from "@/lib/bakery-store";
+import { FlourBurst } from "@/components/flour-burst";
+import { QtyControl } from "@/components/qty-control";
+
+export function ProductCard({ product, delay }: { product: Product; delay: number }) {
+  const addItem = useBakery((s) => s.addItem);
+  const [variantId, setVariantId] = useState(product.variants[0]?.id ?? "");
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const [burst, setBurst] = useState(0);
+  const cardRef = useRef<HTMLElement>(null);
+  const variant = product.variants.find((v) => v.id === variantId) ?? product.variants[0];
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting) {
+          el.classList.add("proof");
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.18 },
+    );
+    obs.observe(el);
+    const fallback = window.setTimeout(() => el.classList.add("proof"), 900);
+    return () => {
+      obs.disconnect();
+      window.clearTimeout(fallback);
+    };
+  }, []);
+
+  function handleAdd() {
+    if (!variant) return;
+    addItem(product, variant, qty);
+    setAdded(true);
+    setBurst((n) => n + 1);
+    window.setTimeout(() => setAdded(false), 900);
+  }
+
+  return (
+    <article
+      ref={cardRef}
+      className="card-surface overflow-hidden rounded-xl opacity-0"
+      style={{ animationDelay: `${delay * 90}ms` }}
+    >
+      <div className="aspect-photo relative overflow-hidden bg-icing">
+        <img
+          src={product.image}
+          alt={product.alt}
+          className="food photo-drift h-full w-full object-cover"
+          style={product.objectPos ? { objectPosition: product.objectPos } : undefined}
+        />
+      </div>
+      <div className="p-5">
+        <h3 className="font-display text-xl font-semibold leading-snug">{product.name}</h3>
+        <p className="mt-1 text-sm text-muted">{product.blurb}</p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {product.variants.map((v: Variant) => (
+            <button
+              key={v.id}
+              type="button"
+              className="chip rounded-full border border-border bg-surface px-3.5 py-2 text-sm font-medium text-fg"
+              data-on={v.id === variantId}
+              onClick={() => setVariantId(v.id)}
+            >
+              {v.label} · {formatARS(v.price)}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <QtyControl value={qty} onChange={(q) => setQty(Math.max(1, q))} />
+          <div className="relative">
+            {burst > 0 ? <FlourBurst key={burst} /> : null}
+            <button
+              type="button"
+              onClick={handleAdd}
+              className={`knead rounded-lg px-5 py-3 text-sm font-semibold text-surface ${added ? "added-flash" : "bg-fg"}`}
+            >
+              {added ? "Sumado" : "Sumar"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}

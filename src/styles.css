@@ -1,0 +1,686 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f3eee4;
+  --color-surface: #fffbf4;
+  --color-fg: #1a3354;
+  --color-muted: #5c6f83;
+  --color-accent: #3a6fa0;
+  --color-accent-dark: #244c74;
+  --color-border: #d6cbb8;
+  --color-icing: #e7eef5;
+  --color-sheet: #e8dfcf;
+
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-border:
+    0 0 0 1px rgba(26, 51, 84, 0.06),
+    0 1px 2px -1px rgba(26, 51, 84, 0.06),
+    0 2px 6px 0 rgba(26, 51, 84, 0.04);
+  --shadow-border-hover:
+    0 0 0 1px rgba(26, 51, 84, 0.1),
+    0 1px 2px -1px rgba(26, 51, 84, 0.08),
+    0 8px 18px -8px rgba(26, 51, 84, 0.14);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+}
+
+/* Paper grain — always on, not an animation */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 80;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Irregular flour motes — not the usual float-up loop */
+.mote {
+  position: fixed;
+  width: 5px;
+  height: 4px;
+  border-radius: 60% 40% 55% 45%;
+  background: color-mix(in oklab, var(--color-fg) 16%, white);
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+}
+
+.mote-a {
+  left: 8%;
+  top: 22%;
+  animation: mote-a 22s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+.mote-b {
+  left: 78%;
+  top: 18%;
+  width: 3px;
+  height: 3px;
+  animation: mote-b 19s 1.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+.mote-c {
+  left: 42%;
+  top: 68%;
+  width: 4px;
+  height: 5px;
+  animation: mote-c 26s 0.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+.mote-d {
+  left: 91%;
+  top: 54%;
+  animation: mote-d 24s 2.1s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+.mote-e {
+  left: 16%;
+  top: 82%;
+  width: 3px;
+  height: 4px;
+  animation: mote-e 21s 3s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+@keyframes mote-a {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  12% {
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate(48px, -62px) rotate(70deg);
+  }
+  80% {
+    opacity: 0.3;
+  }
+}
+@keyframes mote-b {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(12deg);
+  }
+  18% {
+    opacity: 0.45;
+  }
+  55% {
+    transform: translate(-36px, 40px) rotate(-40deg);
+  }
+}
+@keyframes mote-c {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  10% {
+    opacity: 0.4;
+  }
+  60% {
+    transform: translate(22px, -90px) rotate(110deg);
+  }
+}
+@keyframes mote-d {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  14% {
+    opacity: 0.5;
+  }
+  70% {
+    transform: translate(-50px, -28px) rotate(-80deg);
+  }
+}
+@keyframes mote-e {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  20% {
+    opacity: 0.4;
+  }
+  65% {
+    transform: translate(30px, -50px) rotate(50deg);
+  }
+}
+
+/* Title: "Bake" writes in from the left like a nib */
+.write-in {
+  animation: write-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes write-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* "Valentina" letters stamp into dough */
+.stamp-letter {
+  display: inline-block;
+  animation: letter-stamp 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes letter-stamp {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(1.35, 0.55);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(2px) scale(0.94, 1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1, 1);
+  }
+}
+
+/* Rolling pin leaves a dashed flour rule */
+.rule-track {
+  position: relative;
+  height: 2px;
+  width: min(220px, 70%);
+  margin-inline: auto;
+  overflow: visible;
+}
+.rule-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-border) 0 7px,
+    transparent 7px 12px
+  );
+  transform-origin: left center;
+  animation: rule-draw 1.15s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.rule-pin {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 34px;
+  height: 9px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: var(--color-fg);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, white 18%, transparent),
+    6px 0 0 -3px var(--color-fg),
+    -6px 0 0 -3px var(--color-fg);
+  animation: roll-pin 1.15s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes rule-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes roll-pin {
+  from {
+    left: 0;
+    transform: rotate(0deg);
+  }
+  to {
+    left: 100%;
+    transform: translateX(-50%) rotate(480deg);
+  }
+}
+
+/* Cards proof like dough, not a fade-up */
+.proof {
+  animation: proof 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes proof {
+  0% {
+    opacity: 0;
+    transform: scaleX(1.05) scaleY(0.88);
+    filter: blur(2px);
+  }
+  62% {
+    opacity: 1;
+    transform: scaleX(0.99) scaleY(1.04);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+/* Icing fills the chip from the bottom */
+.chip {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-accent);
+  transform: translateY(101%);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.chip:hover::before {
+  transform: translateY(70%);
+}
+.chip[data-on="true"]::before,
+.chip[data-on="true"]:hover::before {
+  transform: translateY(0);
+}
+.chip[data-on="true"] {
+  color: var(--color-surface);
+  border-color: var(--color-accent);
+}
+
+/* Knead press — squash, not a uniform scale */
+.knead {
+  transition: transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.knead:active:not(:disabled) {
+  transform: scale(0.97, 0.92) skewX(-1.2deg);
+}
+
+/* Quantity stamp */
+.qty-stamp {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+.qty-stamp.is-stamping {
+  animation: stamp 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes stamp {
+  0% {
+    transform: scale(1) rotate(0);
+  }
+  30% {
+    transform: scale(0.78) rotate(-9deg);
+  }
+  62% {
+    transform: scale(1.12) rotate(4deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* Name field: ink line draws on focus */
+.name-line {
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0 2px;
+  transition:
+    background-size 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 200ms ease;
+}
+.name-line:focus {
+  background-size: 100% 2px;
+  outline: none;
+  border-color: transparent;
+}
+.name-wrap.is-shaking {
+  animation: ink-shake 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes ink-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-7px) rotate(-0.5deg);
+  }
+  42% {
+    transform: translateX(6px) rotate(0.4deg);
+  }
+  64% {
+    transform: translateX(-3px);
+  }
+  82% {
+    transform: translateX(2px);
+  }
+}
+
+/* Product photo: slow crop drift, like looking down at the table */
+.photo-drift {
+  animation: photo-drift 18s ease-in-out infinite alternate;
+}
+@keyframes photo-drift {
+  from {
+    transform: scale(1.04) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-2%, 1.5%);
+  }
+}
+
+/* Receipt prints out of the tray */
+.ticket {
+  animation: print-out 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes print-out {
+  from {
+    clip-path: inset(0 0 100% 0);
+    filter: blur(2px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    filter: blur(0);
+  }
+}
+
+/* Oven tray: comes up with a slight tilt, then settles */
+.tray-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tray-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.tray {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 50;
+  max-height: 88dvh;
+  transform: translateY(108%) rotate(-1.4deg);
+  transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.tray.is-open {
+  transform: translateY(0) rotate(0);
+  pointer-events: auto;
+}
+
+/* Baking-sheet rivets */
+.rivet {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #efe6d4, #c4b396 70%);
+  box-shadow: 0 0 0 1px rgba(26, 51, 84, 0.12);
+}
+
+/* Flour burst on add */
+.burst-speck {
+  position: absolute;
+  width: 5px;
+  height: 4px;
+  border-radius: 60% 40%;
+  background: color-mix(in oklab, var(--color-fg) 28%, white);
+  pointer-events: none;
+  animation: burst 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(80deg) scale(0.3);
+  }
+}
+
+/* Sticky bar kneads up when first item lands */
+.bar-in {
+  animation: bar-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes bar-in {
+  from {
+    transform: translateY(120%) rotate(1deg);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Wobbly flour underline under section titles */
+.flour-mark {
+  display: block;
+  width: 72px;
+  height: 10px;
+  margin-top: 6px;
+}
+.flour-mark path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+}
+.flour-mark.is-in path {
+  animation: dash-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes dash-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Category pill sliding ink, not a generic underline */
+.cat-pill {
+  position: relative;
+}
+.cat-pill[data-on="true"]::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 4px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 2px;
+  animation: cat-ink 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes cat-ink {
+  from {
+    transform: scaleX(0.2);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.card-surface {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-border);
+  transition: box-shadow 180ms ease-out;
+}
+.card-surface:hover {
+  box-shadow: var(--shadow-border-hover);
+}
+
+img.food {
+  outline: 1px solid rgba(26, 51, 84, 0.1);
+  outline-offset: -1px;
+}
+
+.aspect-photo {
+  aspect-ratio: 4 / 3;
+}
+
+.added-flash {
+  animation: added-flash 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes added-flash {
+  0% {
+    background: var(--color-accent);
+    color: var(--color-surface);
+  }
+  100% {
+    background: var(--color-fg);
+    color: var(--color-surface);
+  }
+}
+
+.see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-border);
+  color: var(--color-fg);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition:
+    box-shadow 180ms ease-out,
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.see-all:hover {
+  box-shadow: var(--shadow-border-hover);
+}
+.see-all:active {
+  transform: scale(0.97, 0.94);
+}
+.see-all .see-arrow {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.see-all:hover .see-arrow {
+  transform: translateX(4px);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px 2px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 150ms ease;
+}
+.back-link:hover {
+  color: var(--color-fg);
+}
+.back-link .see-arrow {
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.back-link:hover .see-arrow {
+  transform: translateX(-3px);
+}
+
+.lead-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-accent) 12%, var(--color-surface));
+  color: var(--color-accent-dark);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.lead-clock {
+  width: 14px;
+  height: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .write-in,
+  .stamp-letter,
+  .rule-track::before,
+  .rule-pin,
+  .proof,
+  .photo-drift,
+  .ticket,
+  .mote,
+  .burst-speck,
+  .bar-in,
+  .flour-mark path,
+  .cat-pill[data-on="true"]::after {
+    animation: none !important;
+  }
+  .write-in {
+    clip-path: none;
+  }
+  .stamp-letter,
+  .proof {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .flour-mark path {
+    stroke-dashoffset: 0;
+  }
+  .tray-overlay,
+  .chip::before,
+  .name-line,
+  .knead,
+  .see-all,
+  .see-all .see-arrow,
+  .back-link .see-arrow {
+    transition: none !important;
+  }
+  .tray {
+    transform: translateY(108%);
+    transition: none !important;
+  }
+  .tray.is-open {
+    transform: none;
+  }
+  .photo-drift {
+    transform: none;
+  }
+}
+
