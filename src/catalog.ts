@@ -27,6 +27,16 @@ export const INSTAGRAM = "https://instagram.com/bakevalentine";
 export const CATEGORIES = ["Tortas", "Tartas", "Clasicos", "Cookies", "Budines"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
+export const PROMO = {
+  active: true,
+  percent: 10, 
+};
+
+export function discountedPrice(price: number) {
+  if (!PROMO.active) return price;
+  return Math.round((price * (1 - PROMO.percent / 100)) / 100) * 100; // redondeado a $100
+}
+
 export const PRODUCTS: Product[] = [
   {
     id: "Chocotorta",
@@ -159,7 +169,7 @@ export const PRODUCTS: Product[] = [
       { id: "docena-choco", label: "Docena · choco", price: 8000 },
     ],
   },
-  
+
   {
     id: "pepas-mem",
     name: "Pepas de Membrillo",
@@ -207,7 +217,7 @@ export const PRODUCTS: Product[] = [
       { id: "7", label: "Cuadrado . 7x7", price: 4000 },
     ],
   },
-  
+
   {
     id: "cookie-chips",
     name: "Cookie Choco chips",
@@ -320,7 +330,7 @@ export const PRODUCTS: Product[] = [
       { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
- 
+
   {
     id: "budin-limon",
     name: "Budín de Limón",
@@ -333,7 +343,7 @@ export const PRODUCTS: Product[] = [
       { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
- 
+
   {
     id: "budin-banana",
     name: "Budín de Banana",
@@ -358,7 +368,7 @@ export const PRODUCTS: Product[] = [
       { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
- 
+
 ];
 
 export function formatARS(n: number) {

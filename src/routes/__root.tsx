@@ -3,6 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { BakeryShell } from "@/components/bakery-shell";
 import appCss from "../styles.css?url";
+import { PromoModal } from "@/components/promo-modal";
 
 const APP_NAME = "Bake Valentine";
 
@@ -48,6 +49,7 @@ function RootComponent() {
           <BakeryShell>
             <Outlet />
           </BakeryShell>
+          <PromoModal />
         </AuthProvider>
         <Scripts />
       </body>

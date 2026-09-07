@@ -6,9 +6,11 @@ import {
   INSTAGRAM,
   LEAD_HOURS,
   WHATSAPP_NUMBER,
+  PROMO,
 } from "@/catalog";
 import { useBakery } from "@/lib/bakery-store";
 import { QtyControl } from "@/components/qty-control";
+
 
 export function BakeryShell({ children }: { children: React.ReactNode }) {
   const hydrate = useBakery((s) => s.hydrate);
@@ -40,10 +42,20 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
     const lines = items.map(
       (i) => `• ${i.qty} ${i.name} (${i.variantLabel}) — ${formatARS(i.price * i.qty)}`,
     );
+
     const extra = note.trim() ? `\n\nNota: ${note.trim()}` : "";
-    const mensaje = `Hola! Soy ${trimmed}. Te hago este pedido:\n\n${lines.join("\n")}\n\nTotal: ${formatARS(total)}${extra}\n\n(${LEAD_HOURS} hs de anticipación)`;
+    const promoLine = PROMO.active ? `\nDescuento del ${PROMO.percent}% ya aplicado` : "";
+    const mensaje = `Hola! Soy ${trimmed}. Te hago este pedido:\n\n${lines.join("\n")}\n\nTotal: ${formatARS(total)}${promoLine}${extra}\n\n(${LEAD_HOURS} hs de anticipación)`;
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function originalPrice(price: number) {
+    if (!PROMO.active) return price;
+
+    return Math.round(
+      (price / (1 - PROMO.percent / 100)) / 100
+    ) * 100;
   }
 
   return (
@@ -67,7 +79,7 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
         >
           @bakevalentine
         </a>
-       
+
       </footer>
 
       {count > 0 && !trayOpen ? (
@@ -131,14 +143,35 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
                 <div className="min-w-0">
                   <p className="font-medium leading-snug">{item.name}</p>
                   <p className="text-sm text-muted">
-                    {item.variantLabel} · {formatARS(item.price)}
+                    {item.variantLabel} ·{" "}
+                    {PROMO.active ? (
+                      <>
+                        <span className="mr-2 line-through opacity-50">
+                          {formatARS(originalPrice(item.price))}
+                        </span>
+
+                        <span className="font-semibold text-accent">
+                          {formatARS(item.price)}
+                        </span>
+                      </>
+                    ) : (
+                      formatARS(item.price)
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <QtyControl value={item.qty} onChange={(q) => setQty(item.key, q)} allowZero />
-                  <span className="w-16 text-right text-sm font-semibold tabular-nums">
-                    {formatARS(item.price * item.qty)}
-                  </span>
+                  <div className="w-28 text-right tabular-nums">
+                    {PROMO.active && (
+                      <div className="text-xs text-muted line-through opacity-50">
+                        {formatARS(originalPrice(item.price) * item.qty)}
+                      </div>
+                    )}
+
+                    <div className="text-sm font-semibold">
+                      {formatARS(item.price * item.qty)}
+                    </div>
+                  </div>
                 </div>
               </li>
             ))}
@@ -170,10 +203,28 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
         </label>
 
         <div className="mt-6 flex items-end justify-between">
-          <p className="text-sm text-muted">Total</p>
-          <p className="font-display text-2xl font-semibold tabular-nums">{formatARS(total)}</p>
-        </div>
+          <div>
+            <p className="text-sm text-muted">Total</p>
 
+            {PROMO.active ? (
+              <p className="text-xs text-accent">
+                {PROMO.percent}% off aplicado
+              </p>
+            ) : null}
+          </div>
+
+          <div className="text-right tabular-nums">
+            {PROMO.active && (
+              <p className="text-sm text-muted line-through opacity-50">
+                {formatARS(originalPrice(total))}
+              </p>
+            )}
+
+            <p className="font-display text-2xl font-semibold">
+              {formatARS(total)}
+            </p>
+          </div>
+        </div>
         <button
           type="button"
           disabled={!items.length}

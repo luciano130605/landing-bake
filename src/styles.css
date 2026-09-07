@@ -87,6 +87,7 @@
   top: 22%;
   animation: mote-a 22s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
+
 .mote-b {
   left: 78%;
   top: 18%;
@@ -94,6 +95,7 @@
   height: 3px;
   animation: mote-b 19s 1.4s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
+
 .mote-c {
   left: 42%;
   top: 68%;
@@ -101,11 +103,13 @@
   height: 5px;
   animation: mote-c 26s 0.8s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
+
 .mote-d {
   left: 91%;
   top: 54%;
   animation: mote-d 24s 2.1s cubic-bezier(0.37, 0, 0.63, 1) infinite;
 }
+
 .mote-e {
   left: 16%;
   top: 82%;
@@ -115,69 +119,89 @@
 }
 
 @keyframes mote-a {
+
   0%,
   100% {
     opacity: 0;
     transform: translate(0, 0) rotate(0deg);
   }
+
   12% {
     opacity: 0.55;
   }
+
   50% {
     transform: translate(48px, -62px) rotate(70deg);
   }
+
   80% {
     opacity: 0.3;
   }
 }
+
 @keyframes mote-b {
+
   0%,
   100% {
     opacity: 0;
     transform: translate(0, 0) rotate(12deg);
   }
+
   18% {
     opacity: 0.45;
   }
+
   55% {
     transform: translate(-36px, 40px) rotate(-40deg);
   }
 }
+
 @keyframes mote-c {
+
   0%,
   100% {
     opacity: 0;
     transform: translate(0, 0);
   }
+
   10% {
     opacity: 0.4;
   }
+
   60% {
     transform: translate(22px, -90px) rotate(110deg);
   }
 }
+
 @keyframes mote-d {
+
   0%,
   100% {
     opacity: 0;
     transform: translate(0, 0);
   }
+
   14% {
     opacity: 0.5;
   }
+
   70% {
     transform: translate(-50px, -28px) rotate(-80deg);
   }
 }
+
 @keyframes mote-e {
+
   0%,
   100% {
     opacity: 0;
     transform: translate(0, 0);
   }
+
   20% {
     opacity: 0.4;
   }
+
   65% {
     transform: translate(30px, -50px) rotate(50deg);
   }
@@ -187,10 +211,12 @@
 .write-in {
   animation: write-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes write-in {
   from {
     clip-path: inset(0 100% 0 0);
   }
+
   to {
     clip-path: inset(0 0 0 0);
   }
@@ -201,15 +227,18 @@
   display: inline-block;
   animation: letter-stamp 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes letter-stamp {
   0% {
     opacity: 0;
     transform: translateY(-16px) scale(1.35, 0.55);
   }
+
   58% {
     opacity: 1;
     transform: translateY(2px) scale(0.94, 1.1);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1, 1);
@@ -224,18 +253,18 @@
   margin-inline: auto;
   overflow: visible;
 }
+
 .rule-track::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--color-border) 0 7px,
-    transparent 7px 12px
-  );
+  background: repeating-linear-gradient(90deg,
+      var(--color-border) 0 7px,
+      transparent 7px 12px);
   transform-origin: left center;
   animation: rule-draw 1.15s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 .rule-pin {
   position: absolute;
   top: 50%;
@@ -251,19 +280,23 @@
     -6px 0 0 -3px var(--color-fg);
   animation: roll-pin 1.15s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes rule-draw {
   from {
     clip-path: inset(0 100% 0 0);
   }
+
   to {
     clip-path: inset(0 0 0 0);
   }
 }
+
 @keyframes roll-pin {
   from {
     left: 0;
     transform: rotate(0deg);
   }
+
   to {
     left: 100%;
     transform: translateX(-50%) rotate(480deg);
@@ -274,17 +307,20 @@
 .proof {
   animation: proof 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes proof {
   0% {
     opacity: 0;
     transform: scaleX(1.05) scaleY(0.88);
     filter: blur(2px);
   }
+
   62% {
     opacity: 1;
     transform: scaleX(0.99) scaleY(1.04);
     filter: blur(0);
   }
+
   100% {
     opacity: 1;
     transform: scaleX(1) scaleY(1);
@@ -297,6 +333,7 @@
   overflow: hidden;
   isolation: isolate;
 }
+
 .chip::before {
   content: "";
   position: absolute;
@@ -306,13 +343,16 @@
   transform: translateY(101%);
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .chip:hover::before {
   transform: translateY(70%);
 }
+
 .chip[data-on="true"]::before,
 .chip[data-on="true"]:hover::before {
   transform: translateY(0);
 }
+
 .chip[data-on="true"] {
   color: var(--color-surface);
   border-color: var(--color-accent);
@@ -322,6 +362,7 @@
 .knead {
   transition: transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .knead:active:not(:disabled) {
   transform: scale(0.97, 0.92) skewX(-1.2deg);
 }
@@ -331,19 +372,24 @@
   display: inline-block;
   font-variant-numeric: tabular-nums;
 }
+
 .qty-stamp.is-stamping {
   animation: stamp 380ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 @keyframes stamp {
   0% {
     transform: scale(1) rotate(0);
   }
+
   30% {
     transform: scale(0.78) rotate(-9deg);
   }
+
   62% {
     transform: scale(1.12) rotate(4deg);
   }
+
   100% {
     transform: scale(1) rotate(0);
   }
@@ -359,28 +405,36 @@
     background-size 420ms cubic-bezier(0.22, 1, 0.36, 1),
     border-color 200ms ease;
 }
+
 .name-line:focus {
   background-size: 100% 2px;
   outline: none;
   border-color: transparent;
 }
+
 .name-wrap.is-shaking {
   animation: ink-shake 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
+
 @keyframes ink-shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   18% {
     transform: translateX(-7px) rotate(-0.5deg);
   }
+
   42% {
     transform: translateX(6px) rotate(0.4deg);
   }
+
   64% {
     transform: translateX(-3px);
   }
+
   82% {
     transform: translateX(2px);
   }
@@ -390,10 +444,12 @@
 .photo-drift {
   animation: photo-drift 18s ease-in-out infinite alternate;
 }
+
 @keyframes photo-drift {
   from {
     transform: scale(1.04) translate(0, 0);
   }
+
   to {
     transform: scale(1.1) translate(-2%, 1.5%);
   }
@@ -404,11 +460,13 @@
   animation: print-out 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--d, 0ms);
 }
+
 @keyframes print-out {
   from {
     clip-path: inset(0 0 100% 0);
     filter: blur(2px);
   }
+
   to {
     clip-path: inset(0 0 0 0);
     filter: blur(0);
@@ -421,10 +479,12 @@
   pointer-events: none;
   transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .tray-overlay.is-open {
   opacity: 1;
   pointer-events: auto;
 }
+
 .tray {
   position: fixed;
   inset-inline: 0;
@@ -435,6 +495,7 @@
   transition: transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
+
 .tray.is-open {
   transform: translateY(0) rotate(0);
   pointer-events: auto;
@@ -460,11 +521,13 @@
   pointer-events: none;
   animation: burst 520ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes burst {
   0% {
     opacity: 1;
     transform: translate(0, 0) scale(1);
   }
+
   100% {
     opacity: 0;
     transform: translate(var(--dx), var(--dy)) rotate(80deg) scale(0.3);
@@ -475,11 +538,13 @@
 .bar-in {
   animation: bar-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes bar-in {
   from {
     transform: translateY(120%) rotate(1deg);
     opacity: 0;
   }
+
   to {
     transform: translateY(0) rotate(0);
     opacity: 1;
@@ -493,6 +558,7 @@
   height: 10px;
   margin-top: 6px;
 }
+
 .flour-mark path {
   fill: none;
   stroke: var(--color-accent);
@@ -501,9 +567,11 @@
   stroke-dasharray: 90;
   stroke-dashoffset: 90;
 }
+
 .flour-mark.is-in path {
   animation: dash-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
+
 @keyframes dash-draw {
   to {
     stroke-dashoffset: 0;
@@ -514,6 +582,7 @@
 .cat-pill {
   position: relative;
 }
+
 .cat-pill[data-on="true"]::after {
   content: "";
   position: absolute;
@@ -525,11 +594,13 @@
   border-radius: 2px;
   animation: cat-ink 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
 @keyframes cat-ink {
   from {
     transform: scaleX(0.2);
     opacity: 0;
   }
+
   to {
     transform: scaleX(1);
     opacity: 1;
@@ -541,6 +612,7 @@
   box-shadow: var(--shadow-border);
   transition: box-shadow 180ms ease-out;
 }
+
 .card-surface:hover {
   box-shadow: var(--shadow-border-hover);
 }
@@ -557,11 +629,13 @@ img.food {
 .added-flash {
   animation: added-flash 640ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 @keyframes added-flash {
   0% {
     background: var(--color-accent);
     color: var(--color-surface);
   }
+
   100% {
     background: var(--color-fg);
     color: var(--color-surface);
@@ -584,15 +658,19 @@ img.food {
     box-shadow 180ms ease-out,
     transform 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .see-all:hover {
   box-shadow: var(--shadow-border-hover);
 }
+
 .see-all:active {
   transform: scale(0.97, 0.94);
 }
+
 .see-all .see-arrow {
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .see-all:hover .see-arrow {
   transform: translateX(4px);
 }
@@ -608,12 +686,15 @@ img.food {
   font-weight: 500;
   transition: color 150ms ease;
 }
+
 .back-link:hover {
   color: var(--color-fg);
 }
+
 .back-link .see-arrow {
   transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
 .back-link:hover .see-arrow {
   transform: translateX(-3px);
 }
@@ -637,6 +718,7 @@ img.food {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .write-in,
   .stamp-letter,
   .rule-track::before,
@@ -651,18 +733,22 @@ img.food {
   .cat-pill[data-on="true"]::after {
     animation: none !important;
   }
+
   .write-in {
     clip-path: none;
   }
+
   .stamp-letter,
   .proof {
     opacity: 1;
     transform: none;
     filter: none;
   }
+
   .flour-mark path {
     stroke-dashoffset: 0;
   }
+
   .tray-overlay,
   .chip::before,
   .name-line,
@@ -672,15 +758,17 @@ img.food {
   .back-link .see-arrow {
     transition: none !important;
   }
+
   .tray {
     transform: translateY(108%);
     transition: none !important;
   }
+
   .tray.is-open {
     transform: none;
   }
+
   .photo-drift {
     transform: none;
   }
 }
-

@@ -4,8 +4,6 @@ export type Product = {
   name: string;
   blurb: string;
   category: Category;
-  image: string;
-  alt: string;
   featured: boolean;
   objectPos?: string;
   variants: Variant[];
@@ -25,67 +23,136 @@ export const CART_KEY = "bake-valentine-cart";
 export const NOTE_KEY = "bake-valentine-note";
 export const LEAD_HOURS = 72;
 export const INSTAGRAM = "https://instagram.com/bakevalentine";
-export const WHATSAPP = "";
 
-export const CATEGORIES = ["Tortas", "Pepas", "Cookies", "Budines"] as const;
+export const CATEGORIES = ["Tortas", "Tartas", "Clasicos", "Cookies", "Budines"] as const;
 export type Category = (typeof CATEGORIES)[number];
+
+export const PROMO = {
+  active: true,
+  percent: 30, 
+};
+
+export function discountedPrice(price: number) {
+  if (!PROMO.active) return price;
+  return Math.round((price * (1 - PROMO.percent / 100)) / 100) * 100; // redondeado a $100
+}
 
 export const PRODUCTS: Product[] = [
   {
-    id: "torta-choco",
-    name: "Torta de chocolate",
-    blurb: "Húmeda, con ganache.",
-    category: "Tortas",
-    image: "/torta-chocolate.jpg",
-    alt: "Torta de chocolate casera en plato azul",
-    featured: true,
-    variants: [
-      { id: "18", label: "18 cm", price: 9000 },
-      { id: "22", label: "22 cm", price: 12500 },
-      { id: "24", label: "24 cm", price: 15000 },
-    ],
-  },
-  {
-    id: "torta-vainilla",
-    name: "Torta de vainilla y dulce de leche",
+    id: "Chocotorta",
+    name: "Chocotorta",
     blurb: "",
     category: "Tortas",
-    image: "/torta-vainilla.jpg",
-    alt: "Torta de vainilla con dulce de leche",
     featured: true,
     variants: [
-      { id: "18", label: "18 cm", price: 8500 },
-      { id: "22", label: "22 cm", price: 11800 },
-      { id: "24", label: "24 cm", price: 14200 },
+      { id: "10", label: "10 cm", price: 10000 },
+      { id: "18", label: "18 cm", price: 35000 },
+      { id: "20", label: "20 cm", price: 42000 },
+      { id: "24", label: "24 cm", price: 50000 },
     ],
   },
   {
-    id: "torta-limon",
-    name: "Torta de limón",
+    id: "Brownie-ddl",
+    name: "Brownie, dulce de leche y crema",
     blurb: "",
     category: "Tortas",
-    image: "/torta-limon.jpg",
-    alt: "Torta de limón casera con un feta cortado",
-    featured: false,
+    featured: true,
     variants: [
-      { id: "18", label: "18 cm", price: 8800 },
-      { id: "22", label: "22 cm", price: 12000 },
-      { id: "24", label: "24 cm", price: 14500 },
+      { id: "10", label: "10 cm", price: 10000 },
+      { id: "18", label: "18 cm", price: 40000 },
+      { id: "20", label: "20 cm", price: 45000 },
+      { id: "24", label: "24 cm", price: 52000 },
     ],
   },
   {
-    id: "torta-coco",
-    name: "Torta de coco",
-    blurb: "Coco y dulce de leche",
-    category: "Tortas",
-    image: "/torta-vainilla.jpg",
-    alt: "Torta de coco casera",
-    featured: false,
-    objectPos: "70% 40%",
+    id: "pastafrola-mem",
+    name: "Pastafrola de Membrillo",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
     variants: [
-      { id: "18", label: "18 cm", price: 8700 },
-      { id: "22", label: "22 cm", price: 11900 },
-      { id: "24", label: "24 cm", price: 14400 },
+      { id: "7", label: "Cuadrado - 7x7", price: 5000 },
+      { id: "12", label: "Chica - 12cm", price: 10000 },
+      { id: "18", label: "Mediana - 18cm", price: 17000 },
+      { id: "26", label: "Grande - 26cm", price: 25000 },
+    ],
+  },
+  {
+    id: "pastafrola-bat",
+    name: "Pastafrola de Batata",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "7", label: "Cuadrado - 7x7", price: 5000 },
+      { id: "12", label: "Chica - 12cm", price: 10000 },
+      { id: "18", label: "Mediana - 18cm", price: 17000 },
+      { id: "26", label: "Grande - 26cm", price: 25000 },
+    ],
+  },
+  {
+    id: "pastafrola-ddl",
+    name: "Pastafrola de Dulce de leche",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "7", label: "Cuadrado - 7x7", price: 5500 },
+      { id: "12", label: "Chica - 12cm", price: 12000 },
+      { id: "18", label: "Mediana - 18cm", price: 19000 },
+      { id: "26", label: "Grande - 26cm", price: 30000 },
+    ],
+  },
+  {
+    id: "tarta-ricota",
+    name: "Tarta de ricota",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "10", label: "Individual - 10cm", price: 7000 },
+      { id: "12", label: "Chica - 12cm", price: 10000 },
+      { id: "18", label: "Mediana - 18cm", price: 17000 },
+      { id: "26", label: "Grande - 26cm", price: 25000 },
+    ],
+  },
+  {
+    id: "tarta-ricota-ddl",
+    name: "Tarta de ricota con Dulce de leche",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "10", label: "Individual - 10cm", price: 8000 },
+      { id: "12", label: "Chica - 12cm", price: 12000 },
+      { id: "18", label: "Mediana - 18cm", price: 20000 },
+      { id: "26", label: "Grande - 26cm", price: 30000 },
+    ],
+  },
+  {
+    id: "tarta-coco-ddl",
+    name: "Tarta de coco y Dulce de leche",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "10", label: "Individual - 10cm", price: 8000 },
+      { id: "12", label: "Chica - 12cm", price: 12000 },
+      { id: "18", label: "Mediana - 18cm", price: 20000 },
+      { id: "26", label: "Grande - 26cm", price: 30000 },
+    ],
+  },
+  {
+    id: "lemon-pie",
+    name: "Lemon pie",
+    blurb: "",
+    category: "Tartas",
+    featured: true,
+    variants: [
+      { id: "10", label: "Individual - 10cm", price: 10000 },
+      { id: "12", label: "Chica - 12cm", price: 15000 },
+      { id: "18", label: "Mediana - 18cm", price: 25000 },
+      { id: "26", label: "Grande - 26cm", price: 38000 },
     ],
   },
 
@@ -93,148 +160,215 @@ export const PRODUCTS: Product[] = [
     id: "pepas-ddl",
     name: "Pepas de dulce de leche",
     blurb: "Masa de vainilla o chocolate",
-    category: "Pepas",
-    image: "/pepas-ddl.jpg",
-    alt: "Pepas de dulce de leche sobre papel de horno",
+    category: "Clasicos",
     featured: true,
     variants: [
-      { id: "media-vainilla", label: "Media docena · vainilla", price: 2800 },
-      { id: "media-choco", label: "Media docena · choco", price: 2900 },
-      { id: "docena-vainilla", label: "Docena · vainilla", price: 5200 },
-      { id: "docena-choco", label: "Docena · choco", price: 5400 },
+      { id: "media-vainilla", label: "Media docena · vainilla", price: 6000 },
+      { id: "media-choco", label: "Media docena · choco", price: 6000 },
+      { id: "docena-vainilla", label: "Docena · vainilla", price: 8000 },
+      { id: "docena-choco", label: "Docena · choco", price: 8000 },
     ],
   },
+
   {
-    id: "pepas-membrillo",
-    name: "Pepas de membrillo",
+    id: "pepas-mem",
+    name: "Pepas de Membrillo",
     blurb: "Masa de vainilla o chocolate",
-    category: "Pepas",
-    image: "/pepas-ddl.jpg",
-    alt: "Pepas de membrillo",
-    featured: false,
-    objectPos: "20% 40%",
+    category: "Clasicos",
+    featured: true,
     variants: [
-      { id: "media-vainilla", label: "Media docena · vainilla", price: 2700 },
-      { id: "media-choco", label: "Media docena · choco", price: 2800 },
-      { id: "docena-vainilla", label: "Docena · vainilla", price: 5000 },
-      { id: "docena-choco", label: "Docena · choco", price: 5200 },
+      { id: "media-vainilla", label: "Media docena · vainilla", price: 6000 },
+      { id: "media-choco", label: "Media docena · choco", price: 6000 },
+      { id: "docena-vainilla", label: "Docena · vainilla", price: 8000 },
+      { id: "docena-choco", label: "Docena · choco", price: 8000 },
     ],
   },
   {
     id: "pepas-batata",
-    name: "Pepas de batata",
+    name: "Pepas de Batata",
     blurb: "Masa de vainilla o chocolate",
-    category: "Pepas",
-    image: "/pepas-ddl.jpg",
-    alt: "Pepas de batata",
-    featured: false,
-    objectPos: "60% 20%",
+    category: "Clasicos",
+    featured: true,
     variants: [
-      { id: "media-vainilla", label: "Media docena · vainilla", price: 2700 },
-      { id: "media-choco", label: "Media docena · choco", price: 2800 },
-      { id: "docena-vainilla", label: "Docena · vainilla", price: 5000 },
-      { id: "docena-choco", label: "Docena · choco", price: 5200 },
+      { id: "media-vainilla", label: "Media docena · vainilla", price: 6000 },
+      { id: "media-choco", label: "Media docena · choco", price: 6000 },
+      { id: "docena-vainilla", label: "Docena · vainilla", price: 8000 },
+      { id: "docena-choco", label: "Docena · choco", price: 8000 },
+    ],
+  },
+  {
+    id: "Scons",
+    name: "Scons dulces",
+    blurb: "",
+    category: "Clasicos",
+    featured: true,
+    variants: [
+      { id: "media", label: "Media docena", price: 8000 },
+      { id: "docena", label: "Docena", price: 12000 },
+    ],
+  },
+  {
+    id: "brownie",
+    name: "Brownie",
+    blurb: "",
+    category: "Clasicos",
+    featured: true,
+    variants: [
+      { id: "7", label: "Cuadrado . 7x7", price: 4000 },
     ],
   },
 
   {
-    id: "cookie-choco",
-    name: "Cookie de chocolate",
-    blurb: "Simple o rellena",
+    id: "cookie-chips",
+    name: "Cookie Choco chips",
+    blurb: "Base de vainilla con chips de chocolate. Rellena de ganache de chocolate",
     category: "Cookies",
-    image: "/cookie-chocolate.jpg",
-    alt: "Cookie de chocolate en plato de crema",
     featured: true,
     variants: [
-      { id: "simple", label: "Simple", price: 600 },
-      { id: "rellena", label: "Rellena", price: 850 },
+      { id: "simple", label: "Simple", price: 4000 },
+      { id: "rellena", label: "Rellena", price: 5000 },
     ],
   },
   {
-    id: "cookie-chips",
-    name: "Cookie con chips",
-    blurb: "Simple o rellena",
+    id: "cookie-bronwnie",
+    name: "Cookie Brownie",
+    blurb: "Base de brownie con chips de chocolate. Rellena de dulce de leche",
     category: "Cookies",
-    image: "/cookie-chips.jpg",
-    alt: "Cookies con chips de chocolate",
     featured: true,
     variants: [
-      { id: "simple", label: "Simple", price: 650 },
-      { id: "rellena", label: "Rellena", price: 900 },
+      { id: "simple", label: "Simple", price: 4000 },
+      { id: "rellena", label: "Rellena", price: 5000 },
+    ],
+  },
+  {
+    id: "cookie-oreo",
+    name: "Cookie Oreo",
+    blurb: "Base de vainilla con trozos de Oreo. Rellena de ganache de chocolate",
+    category: "Cookies",
+    featured: true,
+    variants: [
+      { id: "simple", label: "Simple", price: 4000 },
+      { id: "rellena", label: "Rellena", price: 5000 },
+    ],
+  },
+  {
+    id: "cookie-limon",
+    name: "Cookie Limón",
+    blurb: "Base de limón con semillas de amapola. Rellena de crema de limón",
+    category: "Cookies",
+    featured: true,
+    variants: [
+      { id: "simple", label: "Simple", price: 4000 },
+      { id: "rellena", label: "Rellena", price: 5000 },
+    ],
+  },
+  {
+    id: "cookie-red",
+    name: "Cookie Red Velvet",
+    blurb: "Base de vainilla con tono rojo y chips de chocolate blanco. Rellena de crema de cheesecake",
+    category: "Cookies",
+    featured: true,
+    variants: [
+      { id: "simple", label: "Simple", price: 4000 },
+      { id: "rellena", label: "Rellena", price: 5000 },
+    ],
+  },
+  {
+    id: "cookie-kinder",
+    name: "Cookie Kinder",
+    blurb: "Base de vainilla con trozos de Kinder y chips de chocolate. Rellena de crema de avellanas",
+    category: "Cookies",
+    featured: true,
+    variants: [
+      { id: "simple", label: "Simple", price: 4500 },
+      { id: "rellena", label: "Rellena", price: 5500 },
     ],
   },
   {
     id: "cookie-bonobon",
-    name: "Cookie de Bon o Bon",
-    blurb: "Simple o rellena",
+    name: "Cookie Bon o Bon",
+    blurb: "Base de vainilla con trozos de Bon o Bon. Rellena con pasta de Bon o Bon",
     category: "Cookies",
-    image: "/cookie-chips.jpg",
-    alt: "Cookie de avena",
-    featured: false,
-    objectPos: "right center",
+    featured: true,
     variants: [
-      { id: "simple", label: "Simple", price: 600 },
-      { id: "rellena", label: "Rellena", price: 850 },
+      { id: "simple", label: "Simple", price: 4500 },
+      { id: "rellena", label: "Rellena", price: 5500 },
+    ],
+  },
+  {
+    id: "cookie-ferrero",
+    name: "Cookie Ferrero Rocher",
+    blurb: "Base de chocolate con maní crocante. Rellena con crema de avellanas",
+    category: "Cookies",
+    featured: true,
+    variants: [
+      { id: "simple", label: "Simple", price: 4500 },
+      { id: "rellena", label: "Rellena", price: 5500 },
+    ],
+  },
+  {
+    id: "budin-vainilla",
+    name: "Budín de vainilla",
+    blurb: "",
+    category: "Budines",
+    featured: true,
+    variants: [
+      { id: "porcion", label: "Porción", price: 2000 },
+      { id: "chico", label: "Chico - 300g", price: 10000 },
+      { id: "grande", label: "Grande - 500g", price: 13000 },
+    ],
+  },
+  {
+    id: "budin-marmolado",
+    name: "Budín marmolado",
+    blurb: "",
+    category: "Budines",
+    featured: true,
+    variants: [
+      { id: "porcion", label: "Porción", price: 2000 },
+      { id: "chico", label: "Chico - 300g", price: 10000 },
+      { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
 
   {
-    id: "budin-vainilla",
-    name: "Budín de vainilla",
-    blurb: "Clásico, húmedo y esponjoso",
+    id: "budin-limon",
+    name: "Budín de Limón",
+    blurb: "",
     category: "Budines",
-    image: "/torta-vainilla.jpg",
-    alt: "Budín de vainilla",
     featured: true,
     variants: [
-      { id: "chico", label: "Chico", price: 3200 },
-      { id: "mediano", label: "Mediano", price: 4200 },
-      { id: "grande", label: "Grande", price: 5200 },
+      { id: "porcion", label: "Porción", price: 2000 },
+      { id: "chico", label: "Chico - 300g", price: 10000 },
+      { id: "grande", label: "Grande - 500g", price: 13000 },
+    ],
+  },
+
+  {
+    id: "budin-banana",
+    name: "Budín de Banana",
+    blurb: "",
+    category: "Budines",
+    featured: true,
+    variants: [
+      { id: "porcion", label: "Porción", price: 2000 },
+      { id: "chico", label: "Chico - 300g", price: 10000 },
+      { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
   {
     id: "budin-choco",
-    name: "Budín de chocolate",
-    blurb: "Intenso y con chips",
+    name: "Budín de Chocolate",
+    blurb: "",
     category: "Budines",
-    image: "/torta-chocolate.jpg",
-    alt: "Budín de chocolate",
     featured: true,
     variants: [
-      { id: "chico", label: "Chico", price: 3500 },
-      { id: "mediano", label: "Mediano", price: 4500 },
-      { id: "grande", label: "Grande", price: 5500 },
+      { id: "porcion", label: "Porción", price: 2000 },
+      { id: "chico", label: "Chico - 300g", price: 10000 },
+      { id: "grande", label: "Grande - 500g", price: 13000 },
     ],
   },
-  {
-    id: "budin-naranja",
-    name: "Budín de naranja",
-    blurb: "Con ralladura y glaseado",
-    category: "Budines",
-    image: "/torta-limon.jpg",
-    alt: "Budín de naranja",
-    featured: false,
-    variants: [
-      { id: "chico", label: "Chico", price: 3300 },
-      { id: "mediano", label: "Mediano", price: 4300 },
-      { id: "grande", label: "Grande", price: 5300 },
-    ],
-  },
-  {
-    id: "budin-limon",
-    name: "Budín de limón",
-    blurb: "Fresco y cítrico",
-    category: "Budines",
-    image: "/torta-limon.jpg",
-    alt: "Budín de limón",
-    featured: false,
-    objectPos: "40% 30%",
-    variants: [
-      { id: "chico", label: "Chico", price: 3300 },
-      { id: "mediano", label: "Mediano", price: 4300 },
-      { id: "grande", label: "Grande", price: 5300 },
-    ],
-  },
+
 ];
 
 export function formatARS(n: number) {
@@ -255,7 +389,8 @@ export function productsIn(cat: Category, featuredOnly = false) {
 
 export function seeAllLabel(cat: Category) {
   if (cat === "Tortas") return "Ver todas las tortas";
-  if (cat === "Pepas") return "Ver todas las pepas";
+  if (cat === "Tartas") return "Ver todas las tartas";
+  if (cat === "Clasicos") return "Ver todas los Clasicos";
   if (cat === "Cookies") return "Ver todas las cookies";
   if (cat === "Budines") return "Ver todos los budines";
   return "Ver todos";
