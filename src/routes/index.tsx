@@ -77,7 +77,7 @@ function Home() {
           <section key={cat} id={catId(cat)} className="mt-10 scroll-mt-16">
             <SectionTitle>{cat}</SectionTitle>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 sm:gap-8">
-              {featured.map((p, i) => (
+              {featured.slice(0, 4).map((p, i) => (
                 <ProductCard key={p.id} product={p} delay={i} />
               ))}
             </div>

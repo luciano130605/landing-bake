@@ -47,14 +47,7 @@ export function ProductCard({ product, delay }: { product: Product; delay: numbe
       className="card-surface overflow-hidden rounded-xl opacity-0"
       style={{ animationDelay: `${delay * 90}ms` }}
     >
-      <div className="aspect-photo relative overflow-hidden bg-icing">
-        <img
-          src={product.image}
-          alt={product.alt}
-          className="food photo-drift h-full w-full object-cover"
-          style={product.objectPos ? { objectPosition: product.objectPos } : undefined}
-        />
-      </div>
+      
       <div className="p-5">
         <h3 className="font-display text-xl font-semibold leading-snug">{product.name}</h3>
         <p className="mt-1 text-sm text-muted">{product.blurb}</p>
