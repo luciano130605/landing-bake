@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   CATEGORIES,
   productsIn,
@@ -91,7 +91,7 @@ function Home() {
                 {rest > 0 ? (
                   <span className="font-sans text-sm font-medium text-muted">+{rest}</span>
                 ) : null}
-                <ArrowRight className="see-arrow size-4" strokeWidth={2.2} />
+                <ChevronRight className="see-arrow size-4" strokeWidth={2.2} />
               </Link>
             </div>
           </section>

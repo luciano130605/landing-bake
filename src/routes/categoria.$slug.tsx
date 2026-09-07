@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import {
   CATEGORIES,
   categoryFromSlug,
@@ -30,7 +30,7 @@ function CategoryPage() {
       <div className="flex items-start justify-between gap-4">
         <BrandMark compact />
         <Link to="/" className="back-link shrink-0">
-          <ArrowLeft className="see-arrow size-4" strokeWidth={2.2} />
+          <ChevronLeft className="see-arrow size-4" strokeWidth={2.2} />
           Inicio
         </Link>
       </div>
@@ -64,7 +64,7 @@ function CategoryPage() {
             className="see-all"
           >
             {seeAllLabel(cat)}
-            <ArrowRight className="see-arrow size-4" strokeWidth={2.2} />
+            <ChevronRight className="see-arrow size-4" strokeWidth={2.2} />
           </Link>
         ))}
       </div>
