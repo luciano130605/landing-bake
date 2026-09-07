@@ -52,8 +52,8 @@ export function ProductCard({ product, delay }: { product: Product; delay: numbe
         <h3 className="font-display text-xl font-semibold leading-snug">{product.name}</h3>
         <p className="mt-1 text-sm text-muted">{product.blurb}</p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          {product.variants.map((v: Variant) => (
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          {product.variants.map ((v: Variant) => (
             <button
               key={v.id}
               type="button"

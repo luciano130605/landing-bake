@@ -25,6 +25,7 @@ export const CART_KEY = "bake-valentine-cart";
 export const NOTE_KEY = "bake-valentine-note";
 export const LEAD_HOURS = 72;
 export const INSTAGRAM = "https://instagram.com/bakevalentine";
+export const WHATSAPP = "";
 
 export const CATEGORIES = ["Tortas", "Pepas", "Cookies", "Budines"] as const;
 export type Category = (typeof CATEGORIES)[number];

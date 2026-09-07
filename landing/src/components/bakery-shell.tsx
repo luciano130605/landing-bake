@@ -67,6 +67,7 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
         >
           @bakevalentine
         </a>
+       
       </footer>
 
       {count > 0 && !trayOpen ? (
