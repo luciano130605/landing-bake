@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { Clock, X } from "lucide-react";
+import { BadgePercent, Clock, X } from "lucide-react";
 import {
   formatARS,
   INSTAGRAM,
@@ -307,11 +307,18 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
       <div className="rule-track mt-5" aria-hidden>
         <span className="rule-pin" />
       </div>
-      <p className="mt-8">
+      <p className="mt-8 flex flex-wrap items-center flex-col justify-center gap-4">
         <span className="lead-chip">
           <Clock className="lead-clock" strokeWidth={2.2} aria-hidden />
           Pedidos por WhatsApp · {LEAD_HOURS} hs de anticipación
         </span>
+
+        {PROMO.active ? (
+          <span className="lead-chip">
+            <BadgePercent className="lead-clock" strokeWidth={2.2} aria-hidden />
+            {PROMO.percent}% off hoy en todos los productos
+          </span>
+        ) : null}
       </p>
     </header>
   );
