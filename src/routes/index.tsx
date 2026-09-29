@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ArrowUp, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
+import { ChevronRight, ChevronUp } from "lucide-react";
 import {
   CATEGORIES,
   productsIn,
@@ -9,6 +9,7 @@ import {
   type Category,
 } from "@/catalog";
 import { BrandMark, NameField } from "@/components/bakery-shell";
+import { BoxTeaser } from "@/components/box-teaser";
 import { ProductCard } from "@/components/product-card";
 import { SectionTitle } from "@/components/section-title";
 
@@ -86,6 +87,8 @@ function Home() {
           </a>
         ))}
       </nav>
+
+      <BoxTeaser />
 
       {CATEGORIES.map((cat) => {
         const featured = productsIn(cat, true);

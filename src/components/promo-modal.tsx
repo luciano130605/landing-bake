@@ -1,13 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { X } from "lucide-react";
-import { Link } from "@tanstack/react-router";
-import { PROMO } from "@/catalog";
+import { Gift, X } from "lucide-react";
+import { BOX, formatARS, PROMO } from "@/catalog";
+import { useBakery } from "@/lib/bakery-store";
 
 const STORAGE_KEY = `promo-dismissed:${PROMO.percent}-off-${new Date().toDateString()}`;
 
 export function PromoModal() {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
+  const items = useBakery((s) => s.items);
+  const mode = useBakery((s) => s.mode);
+  const setMode = useBakery((s) => s.setMode);
+  const setTrayOpen = useBakery((s) => s.setTrayOpen);
+  const boxMode = mode === "box";
+  const total = items.reduce((n, i) => n + i.price * i.qty, 0);
 
   const today = useMemo(
     () => new Intl.DateTimeFormat("es-AR", { day: "numeric", month: "long" }).format(new Date()),
@@ -33,7 +39,6 @@ export function PromoModal() {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   function close() {
@@ -108,13 +113,46 @@ export function PromoModal() {
         </svg>
 
         <div className="p-5">
-          <Link
-            to="/"
-            onClick={close}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#3a6fa0] px-6 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.02] active:scale-95"
+          <div className="flex items-baseline justify-between">
+            <p className="text-sm font-semibold">Tu pedido</p>
+            <p className="tabular-nums text-sm font-semibold">
+              {boxMode ? `Total del box: ${formatARS(total)}` : `Total: ${formatARS(total)}`}
+            </p>
+          </div>
+
+          <ul className="mt-3 max-h-52 space-y-2 overflow-y-auto pr-1">
+            {items.map((i) => (
+              <li key={i.key} className="flex items-start justify-between gap-3 text-sm">
+                <span className="min-w-0">
+                  <span className="font-medium">{i.qty}×</span> {i.name}{" "}
+                  <span className="text-muted">({i.variantLabel})</span>
+                </span>
+                <span className="shrink-0 tabular-nums">{formatARS(i.price * i.qty)}</span>
+              </li>
+            ))}
+          </ul>
+
+          {boxMode ? (
+            <p className="mt-3 flex items-center gap-1.5 rounded-md bg-icing px-3 py-2 text-xs font-medium text-accent-dark">
+              <Gift className="size-3.5" strokeWidth={2.4} aria-hidden />
+              Box {BOX.occasion}
+              {PROMO.active ? ` · ${PROMO.percent}% aplicado` : ""} · {BOX.lead}
+            </p>
+          ) : PROMO.active ? (
+            <p className="mt-3 text-xs text-accent">{PROMO.percent}% off aplicado</p>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => {
+              if (!boxMode) setMode("bandeja");
+              close();
+              window.setTimeout(() => setTrayOpen(true), 220);
+            }}
+            className="knead mt-4 w-full rounded-full bg-[#3a6fa0] px-6 py-3.5 text-[15px] font-semibold text-white transition-transform hover:scale-[1.02] active:scale-95"
           >
             Pedir por WhatsApp
-          </Link>
+          </button>
         </div>
       </div>
     </div>

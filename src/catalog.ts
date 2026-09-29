@@ -13,7 +13,10 @@ export type CartItem = {
   productId: string;
   name: string;
   variantLabel: string;
+  /** precio de la carta */
   price: number;
+  /** lo que se cobra: price con el descuento ya aplicado */
+  payPrice: number;
   qty: number;
 };
 
@@ -31,6 +34,45 @@ export const PROMO = {
   active: true,
   percent: 10,
 };
+
+/* ------------------------------------------------------------------ *
+ *  Box especial — armá el tuyo con lo que ya está en la carta
+ *  Para apagarlo o cambiarlo, tocá solo este objeto.
+ * ------------------------------------------------------------------ */
+export const BOX = {
+  active: true,
+  /** "29 de septiembre" */
+  date: "29 de septiembre",
+  /** "sábado 29/09" */
+  shortDate: "sábado 29/09",
+  /** "Día de la Primavera" */
+  occasion: "Día de la Primavera",
+  /** texto largo, con años */
+  fullDate: "29 de septiembre de 2026",
+  /** "Para el 29 de septiembre" */
+  lead: "Para el 29 de septiembre",
+  /** cuánto tiene que avisar antes (texto libre) */
+  deadline: "avisá hasta el 26/09",
+  /** precio del box vacío (0 = solo los productos) */
+  fee: 0,
+  /** texto del flier, para no perder el tono */
+  tagline: "Elegí lo que más te guste de la carta, lo armamos y te lo entregamos listo para regalar.",
+};
+
+/** Se muestra y se puede pedir solo en el día de la promo */
+export function isBoxDay(d = new Date()) {
+  return d.getDate() === 29 && d.getMonth() === 8;
+}
+
+/** visible = activo + es el día (o el flag de debug está prendido) */
+export function boxLive(debug = false, d = new Date()) {
+  return BOX.active && (debug || isBoxDay(d));
+}
+
+/** El box sale con el mismo descuento de la promo (0 si está apagada) */
+export function boxDiscount(subtotal: number) {
+  return PROMO.active ? discountedPrice(subtotal) : 0;
+}
 
 export function discountedPrice(price: number) {
   if (!PROMO.active) return price;
@@ -398,6 +440,15 @@ export function categoryFromSlug(slug: string): Category | undefined {
 
 export function productsIn(cat: Category, featuredOnly = false) {
   return PRODUCTS.filter((p) => p.category === cat && (!featuredOnly || p.featured));
+}
+
+export function productById(id: string) {
+  return PRODUCTS.find((p) => p.id === id);
+}
+
+/** "18 cm · $45.000" */
+export function variantLabel(product: Product, variant: Variant) {
+  return `${variant.label} · ${formatARS(variant.price)}`;
 }
 
 export function seeAllLabel(cat: Category) {

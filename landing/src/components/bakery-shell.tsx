@@ -130,7 +130,7 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
 
         {items.length === 0 ? (
           <p className="mt-8 font-display text-lg italic text-muted">
-            Todavía está vacía. Elegí algo de abajo.
+            Todavía está vacía.
           </p>
         ) : (
           <ul className="mt-6 divide-y divide-border/80">

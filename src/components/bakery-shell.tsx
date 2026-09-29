@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { BadgePercent, Clock, X } from "lucide-react";
+import { BadgePercent, Clock, Gift, X } from "lucide-react";
 import {
+  BOX,
   formatARS,
   INSTAGRAM,
   LEAD_HOURS,
   WHATSAPP_NUMBER,
   PROMO,
 } from "@/catalog";
-import { useBakery } from "@/lib/bakery-store";
+import { buildWhatsAppMessage, useBakery } from "@/lib/bakery-store";
 import { QtyControl } from "@/components/qty-control";
 
 
@@ -23,13 +24,23 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
   const demandName = useBakery((s) => s.demandName);
   const setQty = useBakery((s) => s.setQty);
   const setName = useBakery((s) => s.setName);
+  const mode = useBakery((s) => s.mode);
+  const setMode = useBakery((s) => s.setMode);
 
   useEffect(() => {
     hydrate();
   }, [hydrate]);
 
   const count = useMemo(() => items.reduce((n, i) => n + i.qty, 0), [items]);
-  const total = useMemo(() => items.reduce((n, i) => n + i.price * i.qty, 0), [items]);
+  // lo que se cobra: si la promo está apagada, payPrice ya es igual al precio de la carta
+  const charged = useMemo(() => items.reduce((n, i) => n + i.payPrice * i.qty, 0), [items]);
+  const list = useMemo(() => items.reduce((n, i) => n + i.price * i.qty, 0), [items]);
+
+  const boxMode = mode === "box";
+  const promoing = PROMO.active;
+  const subtotal = boxMode ? list : charged;
+  const total = boxMode ? charged + BOX.fee : charged;
+  const discount = subtotal + (boxMode ? BOX.fee : 0) - total;
 
   function sendWhatsApp() {
     const trimmed = name.trim();
@@ -40,22 +51,21 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
     if (!items.length) return;
 
     const lines = items.map(
-      (i) => `• ${i.qty} ${i.name} (${i.variantLabel}) — ${formatARS(i.price * i.qty)}`,
+      (i) => `• ${i.qty} ${i.name} (${i.variantLabel}) — ${formatARS(i.payPrice * i.qty)}`,
     );
 
-    const extra = note.trim() ? `\n\nNota: ${note.trim()}` : "";
-    const promoLine = PROMO.active ? `\nDescuento del ${PROMO.percent}% ya aplicado` : "";
-    const mensaje = `Hola! Soy ${trimmed}. Te hago este pedido:\n\n${lines.join("\n")}\n\nTotal: ${formatARS(total)}${promoLine}${extra}\n\n(${LEAD_HOURS} hs de anticipación)`;
+    const mensaje = buildWhatsAppMessage({
+      name: trimmed,
+      note,
+      lines,
+      total,
+      promoPercent: promoing ? PROMO.percent : null,
+      box: boxMode
+        ? { subtotal, discount, percent: promoing ? PROMO.percent : 0 }
+        : undefined,
+    });
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
     window.open(url, "_blank", "noopener,noreferrer");
-  }
-
-  function originalPrice(price: number) {
-    if (!PROMO.active) return price;
-
-    return Math.round(
-      (price / (1 - PROMO.percent / 100)) / 100
-    ) * 100;
   }
 
   return (
@@ -90,7 +100,7 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
             className="knead mx-auto flex w-full max-w-3xl items-center justify-between rounded-xl bg-fg px-5 py-4 text-left text-surface shadow-border"
           >
             <span className="text-sm font-medium">
-              Tu bandeja · {count} {count === 1 ? "cosa" : "cosas"}
+              {boxMode ? "Tu box" : "Tu bandeja"} · {count} {count === 1 ? "cosa" : "cosas"}
             </span>
             <span className="tabular-nums text-sm font-semibold">{formatARS(total)}</span>
           </button>
@@ -115,8 +125,14 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-fg/20" />
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="font-display text-2xl font-semibold">Pedido</p>
-            <p className="text-sm text-muted">Revisá y mandalo por WhatsApp.</p>
+            <p className="font-display text-2xl font-semibold">
+              {boxMode ? "Tu box" : "Pedido"}
+            </p>
+            <p className="text-sm text-muted">
+              {boxMode
+                ? `Se entrega el ${BOX.shortDate}. Revisá y mandalo por WhatsApp.`
+                : "Revisá y mandalo por WhatsApp."}
+            </p>
           </div>
           <button
             type="button"
@@ -130,7 +146,7 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
 
         {items.length === 0 ? (
           <p className="mt-8 font-display text-lg italic text-muted">
-            Todavía está vacía. Elegí algo de abajo.
+            {boxMode ? "El box está vacío. Elegí qué va adentro." : "Todavía está vacío."}
           </p>
         ) : (
           <ul className="mt-6 divide-y divide-border/80">
@@ -144,32 +160,32 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
                   <p className="font-medium leading-snug">{item.name}</p>
                   <p className="text-sm text-muted">
                     {item.variantLabel} ·{" "}
-                    {PROMO.active ? (
+                    {promoing ? (
                       <>
                         <span className="mr-2 line-through opacity-50">
-                          {formatARS(originalPrice(item.price))}
+                          {formatARS(item.price)}
                         </span>
 
                         <span className="font-semibold text-accent">
-                          {formatARS(item.price)}
+                          {formatARS(item.payPrice)}
                         </span>
                       </>
                     ) : (
-                      formatARS(item.price)
+                      formatARS(item.payPrice)
                     )}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <QtyControl value={item.qty} onChange={(q) => setQty(item.key, q)} allowZero />
                   <div className="w-28 text-right tabular-nums">
-                    {PROMO.active && (
+                    {promoing && (
                       <div className="text-xs text-muted line-through opacity-50">
-                        {formatARS(originalPrice(item.price) * item.qty)}
+                        {formatARS(item.price * item.qty)}
                       </div>
                     )}
 
                     <div className="text-sm font-semibold">
-                      {formatARS(item.price * item.qty)}
+                      {formatARS(item.payPrice * item.qty)}
                     </div>
                   </div>
                 </div>
@@ -202,39 +218,74 @@ export function BakeryShell({ children }: { children: React.ReactNode }) {
           />
         </label>
 
-        <div className="mt-6 flex items-end justify-between">
-          <div>
-            <p className="text-sm text-muted">Total</p>
-
-            {PROMO.active ? (
-              <p className="text-xs text-accent">
-                {PROMO.percent}% off aplicado
-              </p>
-            ) : null}
-          </div>
-
-          <div className="text-right tabular-nums">
-            {PROMO.active && (
-              <p className="text-sm text-muted line-through opacity-50">
-                {formatARS(originalPrice(total))}
-              </p>
-            )}
-
-            <p className="font-display text-2xl font-semibold">
-              {formatARS(total)}
+        {boxMode ? (
+          <div className="mt-6 rounded-lg bg-surface p-4 shadow-border">
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <Gift className="size-4 text-accent" strokeWidth={2.2} aria-hidden />
+              Box {BOX.occasion} · {BOX.shortDate}
             </p>
+            <dl className="mt-3 space-y-1.5 text-sm">
+              <div className="flex justify-between">
+                <dt className="text-muted">Productos ({count})</dt>
+                <dd className="tabular-nums">{formatARS(subtotal)}</dd>
+              </div>
+              {promoing ? (
+                <div className="flex justify-between">
+                  <dt className="text-muted">Descuento ({PROMO.percent}%)</dt>
+                  <dd className="font-semibold text-accent tabular-nums">
+                    −{formatARS(discount)}
+                  </dd>
+                </div>
+              ) : null}
+              <div className="flex justify-between border-t border-border/70 pt-2 text-base font-semibold">
+                <dt>Total del box</dt>
+                <dd className="font-display tabular-nums">{formatARS(total)}</dd>
+              </div>
+            </dl>
+            <p className="mt-3 text-xs text-muted">{BOX.lead} · {BOX.deadline}</p>
           </div>
-        </div>
+        ) : (
+          <div className="mt-6 flex items-end justify-between">
+            <div>
+              <p className="text-sm text-muted">Total</p>
+
+              {promoing ? (
+                <p className="text-xs text-accent">{PROMO.percent}% off aplicado</p>
+              ) : null}
+            </div>
+
+            <div className="text-right tabular-nums">
+              {promoing && (
+                <p className="text-sm text-muted line-through opacity-50">
+                  {formatARS(list)}
+                </p>
+              )}
+
+              <p className="font-display text-2xl font-semibold">{formatARS(total)}</p>
+            </div>
+          </div>
+        )}
+        {boxMode ? (
+          <button
+            type="button"
+            onClick={() => setMode("bandeja")}
+            className="knead mt-5 w-full rounded-lg border border-border bg-surface py-3 text-sm font-medium text-fg"
+          >
+            Salir del modo box
+          </button>
+        ) : null}
         <button
           type="button"
           disabled={!items.length}
           onClick={sendWhatsApp}
-          className="knead mt-5 w-full rounded-lg bg-accent py-4 text-center text-base font-semibold text-surface disabled:opacity-40"
+          className="knead mt-3 w-full rounded-lg bg-accent py-4 text-center text-base font-semibold text-surface disabled:opacity-40"
         >
-          Mandar por WhatsApp
+          {boxMode ? "Pedir el box por WhatsApp" : "Mandar por WhatsApp"}
         </button>
         <p className="mt-3 text-center text-xs text-muted">
-          Pedidos con {LEAD_HOURS} hs de anticipación
+          {boxMode
+            ? `${BOX.lead} · ${BOX.deadline}`
+            : `Pedidos con ${LEAD_HOURS} hs de anticipación`}
         </p>
       </aside>
     </div>
