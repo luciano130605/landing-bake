@@ -1,14 +1,12 @@
 import { create } from "zustand";
 import {
   CART_KEY,
-  discountedPrice,
   NAME_KEY,
   NOTE_KEY,
   type CartItem,
   type Product,
   type Variant,
 } from "@/catalog";
-
 
 type BakeryState = {
   name: string;
@@ -77,7 +75,6 @@ export const useBakery = create<BakeryState>((set, get) => ({
   },
   addItem: (product, variant, qty) => {
     const key = `${product.id}:${variant.id}`;
-    const price = discountedPrice(variant.price);
     const items = get().items;
     const found = items.find((i) => i.key === key);
     const next = found
@@ -89,7 +86,7 @@ export const useBakery = create<BakeryState>((set, get) => ({
           productId: product.id,
           name: product.name,
           variantLabel: variant.label,
-          price,
+          price: variant.price,
           qty,
         },
       ];
